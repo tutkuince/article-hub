@@ -1,5 +1,6 @@
 package com.incetutku.articlehub.config
 
+import com.incetutku.articlehub.service.CustomUserDetailService
 import com.incetutku.articlehub.service.TokenService
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
@@ -14,7 +15,7 @@ import org.springframework.web.filter.OncePerRequestFilter
 
 @Component
 class JWTAuthenticationFilter(
-    private val userDetailsService: UserDetailsService,
+    private val userDetailsService: CustomUserDetailService,
     private val tokenService: TokenService
 ) : OncePerRequestFilter() {
 

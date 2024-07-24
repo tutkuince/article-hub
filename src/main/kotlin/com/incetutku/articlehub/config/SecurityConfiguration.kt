@@ -18,15 +18,16 @@ class SecurityConfiguration(private val authenticationProvider: AuthenticationPr
     fun securityFilterChain(
         http: HttpSecurity,
         jwtAuthenticationFilter: JWTAuthenticationFilter
-    ): DefaultSecurityFilterChain =
+    ): DefaultSecurityFilterChain {
         http
             .csrf { it.disable() }
             .authorizeHttpRequests {
-                it.requestMatchers("/api/auth", "/api/auth/refresh", "/error")
+                it
+                    .requestMatchers("/api/auth", "api/auth/refresh", "/error")
                     .permitAll()
-                    .requestMatchers(HttpMethod.POST, "/api/v1/users")
+                    .requestMatchers(HttpMethod.POST, "/api/user")
                     .permitAll()
-                    .requestMatchers("/api/v1/users**")
+                    .requestMatchers("/api/user**")
                     .hasRole("ADMIN")
                     .anyRequest()
                     .fullyAuthenticated()
@@ -36,6 +37,7 @@ class SecurityConfiguration(private val authenticationProvider: AuthenticationPr
             }
             .authenticationProvider(authenticationProvider)
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
-            .build()
 
+        return http.build()
+    }
 }
